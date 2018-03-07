@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/cardview_light_background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/no_profile"
+            android:contentDescription="@string/profile_image_description"
+        />
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/profile_image"
+            android:text="@string/username"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+        />
+
+        <TextView
+            android:id="@+id/company"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/username"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/profile_image"
+            android:layout_toEndOf="@id/profile_image"
+            android:text="@string/company"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textStyle="bold"
+            android:fontFamily="cursive"
+        />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_alignBottom="@+id/company"
+            android:layout_toEndOf="@+id/company"
+            android:layout_toRightOf="@+id/company"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/arrow"
+            android:contentDescription="@string/arrow_image_description"/>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
