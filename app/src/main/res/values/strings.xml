@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Java Developers</string>
     <string name="username">Chykehyman</string>
-    <string name="company">Works For: Andela Nigeria</string>
+    <string name="company_text">Company:</string>
+    <string name="company">Andela Nigeria</string>
     <string name="profile_image_description">developer profile image</string>
     <string name="arrow_image_description">view details image</string>
 </resources>
