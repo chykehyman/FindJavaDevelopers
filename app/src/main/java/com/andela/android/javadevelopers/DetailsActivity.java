@@ -11,6 +11,10 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        displayProfile();
+    }
+
+    private void displayProfile() {
         Intent intent = this.getIntent();
         String devUsername = intent.getStringExtra("USER_NAME");
         String devCompany = intent.getStringExtra("COMPANY");
@@ -20,18 +24,5 @@ public class DetailsActivity extends AppCompatActivity {
         TextView company = findViewById(R.id.company);
         username.setText(devUsername);
         company.setText(devCompany);
-//        displayProfile();
     }
-
-//    private void displayProfile() {
-//        Intent intent = this.getIntent();
-//        String devUsername = intent.getStringExtra("USER_NAME");
-//        String devCompany = intent.getStringExtra("COMPANY");
-//
-//        // Capture the layout's TextView and set the string as its text
-//        TextView username = findViewById(R.id.username);
-//        TextView company = findViewById(R.id.company);
-//        username.setText(devUsername);
-//        company.setText(devCompany);
-//    }
 }
