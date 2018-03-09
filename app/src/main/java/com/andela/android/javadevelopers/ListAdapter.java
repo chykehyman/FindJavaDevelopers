@@ -1,6 +1,7 @@
 package com.andela.android.javadevelopers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private List<DevelopersList> developersLists;
     private Context context;
+
 
     public ListAdapter(List<DevelopersList> developersLists, Context context) {
         this.developersLists = developersLists;
@@ -45,10 +47,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        DevelopersList developersList = developersLists.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        final DevelopersList developersList = developersLists.get(position);
+        final String user_name = developersLists.get(position).getUsername();
+        final String company = developersLists.get(position).getWorkplace();
         holder.username.setText(developersList.getUsername());
         holder.workplace.setText(developersList.getWorkplace());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DetailsActivity.class);
+                intent.putExtra("USER_NAME", user_name);
+                intent.putExtra("COMPANY", company);
+                context.startActivity(intent);
+            }
+        });
 
     }
 
