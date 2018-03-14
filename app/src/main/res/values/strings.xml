@@ -5,4 +5,8 @@
     <string name="company">Andela Nigeria</string>
     <string name="profile_image_description">developer profile image</string>
     <string name="arrow_image_description">view details image</string>
+    <string name="github_url">github.com/chykehyman</string>
+    <string name="username_text">Username</string>
+    <string name="github_url_text">Github Link</string>
+    <string name="details_name">Profile</string>
 </resources>
