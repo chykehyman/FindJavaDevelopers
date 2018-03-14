@@ -1,4 +1,4 @@
-package com.andela.android.javadevelopers;
+package com.andela.android.javadevelopers.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.andela.android.javadevelopers.R;
+import com.andela.android.javadevelopers.model.DevelopersList;
+import com.andela.android.javadevelopers.view.DetailsActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -27,14 +33,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView profileImage;
         public TextView username;
-        public TextView workplace;
+        public TextView githubLink;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
+            profileImage = itemView.findViewById(R.id.profile_image);
             username = itemView.findViewById(R.id.username);
-            workplace = itemView.findViewById(R.id.company);
+            githubLink = itemView.findViewById(R.id.github_url);
         }
     }
 
@@ -49,17 +57,24 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final DevelopersList developersList = developersLists.get(position);
-        final String user_name = developersLists.get(position).getUsername();
-        final String company = developersLists.get(position).getWorkplace();
+        final String profileImage = developersLists.get(position).getProfileImage();
+        final String userName = developersLists.get(position).getUsername();
+        final String githubLink = developersLists.get(position).getGithubLink();
+
         holder.username.setText(developersList.getUsername());
-        holder.workplace.setText(developersList.getWorkplace());
+        Picasso.with(context)
+                .load(profileImage)
+                .placeholder(R.drawable.no_profile)
+                .into(holder.profileImage);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailsActivity.class);
-                intent.putExtra("USER_NAME", user_name);
-                intent.putExtra("COMPANY", company);
+                intent.putExtra("PROFILE_IMAGE", profileImage);
+                intent.putExtra("USER_NAME", userName);
+                intent.putExtra("GITHUB_LINK", githubLink);
                 context.startActivity(intent);
             }
         });
