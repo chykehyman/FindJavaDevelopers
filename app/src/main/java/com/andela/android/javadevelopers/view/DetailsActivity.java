@@ -1,9 +1,13 @@
-package com.andela.android.javadevelopers;
+package com.andela.android.javadevelopers.view;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.andela.android.javadevelopers.R;
+import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -16,13 +20,19 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void displayProfile() {
         Intent intent = this.getIntent();
-        String devUsername = intent.getStringExtra("USER_NAME");
-        String devCompany = intent.getStringExtra("COMPANY");
 
-        // Capture the layout's TextView and set the string as its text
+        String devProfileImage = intent.getStringExtra("PROFILE_IMAGE");
+        String devUsername = intent.getStringExtra("USER_NAME");
+        String devGithubLink = intent.getStringExtra("GITHUB_LINK");
+
+        ImageView profileImage = findViewById(R.id.profile_image_header);
         TextView username = findViewById(R.id.username);
-        TextView company = findViewById(R.id.company);
+        TextView githubLink = findViewById(R.id.github_url);
         username.setText(devUsername);
-        company.setText(devCompany);
+        Picasso.with(this)
+                .load(devProfileImage)
+                .placeholder(R.drawable.no_profile)
+                .into(profileImage);
+        githubLink.setText(devGithubLink);
     }
 }
