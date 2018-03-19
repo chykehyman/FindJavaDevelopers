@@ -1,0 +1,80 @@
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+
+
+def configDir = "${project.rootDir}/config/quality"
+def reportsDir = "${project.buildDir}/reports"
+
+task checkstyle(type: Checkstyle) {
+    group 'verification'
+
+    configFile file("$configDir/checkstyle/checkstyle.xml")
+    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml")
+            .absolutePath
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+
+    classpath = files()
+    ignoreFailures = false
+}
+
+task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
+    group 'verification'
+
+    excludeFilter = rootProject.file("config/quality/findbugs.xml")
+    classes = files("${project.buildDir}/intermediates/classes/debug/")
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        html.destination file("$reportsDir/findbugs.html")
+    }
+
+    effort = "max"
+    reportLevel = "high"
+    classpath = files()
+    ignoreFailures = false
+}
+
+task pmd(type: Pmd) {
+    group 'verification'
+
+    ignoreFailures = false
+    ruleSets = []
+
+    ruleSetFiles = files("$configDir/pmd.xml")
+    source = fileTree('src/main/java')
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        html.destination file("$reportsDir/pmd.html")
+    }
+}
+
+android {
+    lintOptions {
+        abortOnError true
+        quiet true
+        lintConfig file("$configDir/lint.xml")
+        xmlReport false
+        htmlReport true
+        htmlOutput file("$reportsDir/lint.html")
+    }
+}
+
+// Add checkstyle, findbugs, pmd and lint as dependencies to the inbuilt android 'check' task.
+check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
