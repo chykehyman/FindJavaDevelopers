@@ -8,13 +8,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class DevelopersList {
     @SerializedName("login")
-    private String username;
+    private final String username;
 
     @SerializedName("avatar_url")
-    private String profileImage;
+    private final String profileImage;
 
     @SerializedName("html_url")
-    private String githubLink;
+    private final String githubLink;
 
     public DevelopersList(String username, String profileImage, String githubLink) {
         this.username = username;

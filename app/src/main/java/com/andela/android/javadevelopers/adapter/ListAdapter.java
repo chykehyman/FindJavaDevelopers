@@ -23,8 +23,8 @@ import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    private List<DevelopersList> developersLists;
-    private Context context;
+    private final List<DevelopersList> developersLists;
+    private final Context context;
 
 
     public ListAdapter(List<DevelopersList> developersLists, Context context) {

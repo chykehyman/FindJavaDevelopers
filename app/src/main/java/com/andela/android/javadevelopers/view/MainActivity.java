@@ -9,7 +9,7 @@ import com.andela.android.javadevelopers.presenter.DeveloperPresenter;
 
 
 public class MainActivity extends AppCompatActivity {
-    private DeveloperPresenter developerPresenter = new DeveloperPresenter(MainActivity.this);
+    private final DeveloperPresenter developerPresenter = new DeveloperPresenter(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

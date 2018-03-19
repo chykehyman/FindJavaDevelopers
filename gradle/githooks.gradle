@@ -1,0 +1,13 @@
+// copy or move pre-commit shell script to internalized system .git folder and execute shell script
+task setupGitHooks(type: Copy) {
+    "cp pre-commit.sh .git/hooks/pre-commit".execute()
+}
+
+// grant 'hooks' folder and all its contents, in .git directory, system(file) executable permission
+task makeHookExecutable() {
+    Runtime.getRuntime().exec("chmod -R +x .git/hooks/")
+}
+
+// add new tasks as dependencies for inbuilt 'build' task
+makeHookExecutable.dependsOn setupGitHooks
+build.dependsOn makeHookExecutable

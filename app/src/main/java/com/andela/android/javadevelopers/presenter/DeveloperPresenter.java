@@ -3,6 +3,7 @@ package com.andela.android.javadevelopers.presenter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.andela.android.javadevelopers.adapter.ListAdapter;
 import com.andela.android.javadevelopers.model.DevelopersList;
@@ -21,10 +22,10 @@ import retrofit2.Response;
 
 public class DeveloperPresenter {
     private DeveloperService developerService;
-    private Context context;
+    private final Context context;
 
     public DeveloperPresenter(Context context) {
-        this.context=context;
+        this.context = context;
         if (this.developerService == null) {
             this.developerService = new DeveloperService();
         }
@@ -37,7 +38,8 @@ public class DeveloperPresenter {
             .enqueue(new Callback<DevelopersListResponse>() {
 
                 @Override
-                public void onResponse(@NonNull Call<DevelopersListResponse> call, @NonNull Response<DevelopersListResponse> response) {
+                public void onResponse(@NonNull Call<DevelopersListResponse> call,
+                                       @NonNull Response<DevelopersListResponse> response) {
                     List<DevelopersList> developersList = response.body().getDevelopersLists();
 
                     if (developersList != null) {
@@ -47,11 +49,12 @@ public class DeveloperPresenter {
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<DevelopersListResponse> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<DevelopersListResponse> call,
+                                      @NonNull Throwable t) {
                     try {
                         throw new InterruptedException("Something went wrong!");
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.e("onFailure", e + "An error occurred");
                     }
                 }
             });
