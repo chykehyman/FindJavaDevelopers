@@ -1,12 +1,15 @@
 package com.andela.android.javadevelopers.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by chike on 07/03/2018.
  */
 
-public class DevelopersList {
+public class DevelopersList implements Parcelable {
     @SerializedName("login")
     private final String username;
 
@@ -16,11 +19,6 @@ public class DevelopersList {
     @SerializedName("html_url")
     private final String githubLink;
 
-    public DevelopersList(String username, String profileImage, String githubLink) {
-        this.username = username;
-        this.profileImage = profileImage;
-        this.githubLink = githubLink;
-    }
 
     public String getUsername() {
         return username;
@@ -33,6 +31,36 @@ public class DevelopersList {
     public String getGithubLink() {
         return githubLink;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    protected DevelopersList(Parcel in) {
+        username = in.readString();
+        profileImage = in.readString();
+        githubLink = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(username);
+        dest.writeString(profileImage);
+        dest.writeString(githubLink);
+    }
+
+    public static final Creator<DevelopersList> CREATOR = new Creator<DevelopersList>() {
+        @Override
+        public DevelopersList createFromParcel(Parcel in) {
+            return new DevelopersList(in);
+        }
+
+        @Override
+        public DevelopersList[] newArray(int size) {
+            return new DevelopersList[size];
+        }
+    };
 }
 
 

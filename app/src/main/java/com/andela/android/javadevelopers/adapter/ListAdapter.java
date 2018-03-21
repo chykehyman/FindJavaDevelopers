@@ -1,6 +1,5 @@
 package com.andela.android.javadevelopers.adapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +14,7 @@ import com.andela.android.javadevelopers.model.DevelopersList;
 import com.andela.android.javadevelopers.view.DetailsActivity;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by chike on 07/03/2018.
@@ -23,21 +22,19 @@ import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    private final List<DevelopersList> developersLists;
-    private final Context context;
+    private final ArrayList<DevelopersList> developersLists;
 
 
-    public ListAdapter(List<DevelopersList> developersLists, Context context) {
+    public ListAdapter(ArrayList<DevelopersList> developersLists) {
         this.developersLists = developersLists;
-        this.context = context;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView profileImage;
-        public TextView username;
-        public TextView githubLink;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView profileImage;
+        TextView username;
+        TextView githubLink;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             profileImage = itemView.findViewById(R.id.profile_image);
@@ -56,13 +53,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final DevelopersList developersList = developersLists.get(position);
         final String profileImage = developersLists.get(position).getProfileImage();
         final String userName = developersLists.get(position).getUsername();
         final String githubLink = developersLists.get(position).getGithubLink();
 
-        holder.username.setText(developersList.getUsername());
-        Picasso.with(context)
+        holder.username.setText(userName);
+        Picasso.with(holder.itemView.getContext())
                 .load(profileImage)
                 .placeholder(R.drawable.no_profile)
                 .into(holder.profileImage);
@@ -71,11 +67,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, DetailsActivity.class);
+                Intent intent = new Intent(view.getContext(), DetailsActivity.class);
                 intent.putExtra("PROFILE_IMAGE", profileImage);
                 intent.putExtra("USER_NAME", userName);
                 intent.putExtra("GITHUB_LINK", githubLink);
-                context.startActivity(intent);
+                view.getContext().startActivity(intent);
             }
         });
 
