@@ -1,16 +1,13 @@
 package com.andela.android.javadevelopers.presenter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.andela.android.javadevelopers.adapter.ListAdapter;
 import com.andela.android.javadevelopers.model.DevelopersList;
 import com.andela.android.javadevelopers.model.DevelopersListResponse;
 import com.andela.android.javadevelopers.service.DeveloperService;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,16 +19,20 @@ import retrofit2.Response;
 
 public class DeveloperPresenter {
     private DeveloperService developerService;
-    private final Context context;
+    private final View view;
 
-    public DeveloperPresenter(Context context) {
-        this.context = context;
+    public DeveloperPresenter(View view) {
+        this.view = view;
         if (this.developerService == null) {
             this.developerService = new DeveloperService();
         }
     }
 
-    public void getDevelopers(final RecyclerView recyclerView) {
+    public interface View {
+        void displayDevelopersList(ArrayList<DevelopersList> list);
+    }
+
+    public void getDevelopers() {
         developerService
             .getAPI()
             .getDevelopersLists()
@@ -40,12 +41,15 @@ public class DeveloperPresenter {
                 @Override
                 public void onResponse(@NonNull Call<DevelopersListResponse> call,
                                        @NonNull Response<DevelopersListResponse> response) {
-                    List<DevelopersList> developersList = response.body().getDevelopersLists();
 
-                    if (developersList != null) {
-                        RecyclerView.Adapter adapter = new ListAdapter(developersList, context);
-                        recyclerView.setAdapter(adapter);
-                    }
+                    DevelopersListResponse developersResponse = response.body();
+                    ArrayList<DevelopersList> developersList;
+
+                    assert developersResponse != null;
+
+                    developersList = developersResponse.getDevelopersLists();
+
+                    view.displayDevelopersList(developersList);
                 }
 
                 @Override

@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DeveloperService {
     private Retrofit retrofit = null;
-    public static final String BASE_URL = "https://api.github.com";
+    private static final String BASE_URL = "https://api.github.com";
 
     public DevelopersApi getAPI() {
 
