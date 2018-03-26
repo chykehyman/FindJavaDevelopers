@@ -1,7 +1,6 @@
 package com.andela.android.javadevelopers.presenter;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.andela.android.javadevelopers.model.DevelopersList;
 import com.andela.android.javadevelopers.model.DevelopersListResponse;

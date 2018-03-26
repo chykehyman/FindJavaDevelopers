@@ -117,7 +117,9 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
                 swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(this, "Developers list refreshed",
                         Toast.LENGTH_LONG).show();
-            } else { swipeRefreshLayout.setRefreshing(false); }
+            } else {
+                swipeRefreshLayout.setRefreshing(false);
+            }
         }
 
         isConnected = cnc.getConnectivityStatus();
@@ -188,7 +190,9 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
                     public void onClick(View view) {
                         if (developersList != null) {
                             snackbar.dismiss();
-                        } else { queryApi(swipeRefreshLayout); }
+                        } else {
+                            queryApi(swipeRefreshLayout);
+                        }
                     }
                 });
 
