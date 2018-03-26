@@ -12,6 +12,4 @@
     <string name="share_details">Share Profile</string>
     <string name="share_intent_type">text/plain</string>
     <string name="share_part_message">Check out this developer @</string>
-    <string name="no_connection">No internet connection</string>
-    <string name="fetch_failed">Bad internet Connection</string>
 </resources>
