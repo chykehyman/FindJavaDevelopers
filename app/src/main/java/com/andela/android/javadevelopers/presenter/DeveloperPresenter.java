@@ -1,7 +1,6 @@
 package com.andela.android.javadevelopers.presenter;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.andela.android.javadevelopers.model.DevelopersList;
 import com.andela.android.javadevelopers.model.DevelopersListResponse;
@@ -17,10 +16,14 @@ import retrofit2.Response;
  * Created by chike on 13/03/2018.
  */
 
+
 public class DeveloperPresenter {
     private DeveloperService developerService;
     private final View view;
 
+    /**
+     * @param view - MainActivity's view context
+     */
     public DeveloperPresenter(View view) {
         this.view = view;
         if (this.developerService == null) {
@@ -28,16 +31,29 @@ public class DeveloperPresenter {
         }
     }
 
+    /**
+     * Interface implementable by its view activity (MainActivity)
+     */
     public interface View {
         void displayDevelopersList(ArrayList<DevelopersList> list);
+        void dismissDialog(String fetchStatus);
     }
 
+    /**
+     * Communicates with github service class to receive list of java developers
+     */
     public void getDevelopers() {
         developerService
             .getAPI()
             .getDevelopersLists()
             .enqueue(new Callback<DevelopersListResponse>() {
 
+                /**
+                 * Receives response promise and calls the display developers method
+                 *
+                 * @param call     - retrofit http network instance
+                 * @param response - array(object) response/feedback promise
+                 */
                 @Override
                 public void onResponse(@NonNull Call<DevelopersListResponse> call,
                                        @NonNull Response<DevelopersListResponse> response) {
@@ -52,14 +68,17 @@ public class DeveloperPresenter {
                     view.displayDevelopersList(developersList);
                 }
 
+                /**
+                 * Listens for request errors from api queries and dismisses any running dialogs
+                 *
+                 * @param call - retrofit http network instance
+                 * @param t    - exception error object
+                 */
                 @Override
                 public void onFailure(@NonNull Call<DevelopersListResponse> call,
                                       @NonNull Throwable t) {
-                    try {
-                        throw new InterruptedException("Something went wrong!");
-                    } catch (InterruptedException e) {
-                        Log.e("onFailure", e + "An error occurred");
-                    }
+
+                      view.dismissDialog("failure");
                 }
             });
     }
