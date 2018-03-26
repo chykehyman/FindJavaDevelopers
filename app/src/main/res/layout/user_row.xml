@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="95dp"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_marginTop="8dp"
@@ -24,41 +24,22 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:contentDescription="@string/profile_image_description"
             android:scaleType="fitXY"
             tools:src="@drawable/no_profile"
         />
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/username"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4">
-
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:fontFamily="serif"
-                tools:text="@string/username"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-            />
-
-
-        </RelativeLayout>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/arrow_image_description"
-            tools:src="@drawable/arrow"
+            android:layout_weight="2"
+            android:fontFamily="serif"
+            tools:text="@string/username"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
         />
 
     </LinearLayout>
