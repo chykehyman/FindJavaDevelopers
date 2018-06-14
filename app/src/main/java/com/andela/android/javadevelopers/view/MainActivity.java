@@ -1,6 +1,7 @@
 package com.andela.android.javadevelopers.view;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
     ProgressDialog progressDialog;
     SwipeRefreshLayout swipeRefreshLayout;
 
+    String location, limit;
+
     /**
      * Called upon start of application
      *
@@ -50,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
         setContentView(R.layout.activity_main);
 
         setSwipeRefreshLayout();
+
+        Intent intent = getIntent();
+        location = intent.getStringExtra("city");
+        limit = intent.getStringExtra("limit");
+
 
         cnc = new CheckNetworkConnection(this);
         isConnected = cnc.getConnectivityStatus();
@@ -160,11 +168,12 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
      * @param swipeRefreshLayout - layout containing list of developers
      */
     public void queryApi(SwipeRefreshLayout swipeRefreshLayout) {
+         String title = String.format("%s java developers", location);
         if (!swipeRefreshLayout.isRefreshing()) {
-            progressDialog = ProgressDialog.show(this, "Kenya Java Developers",
+            progressDialog = ProgressDialog.show(this, title,
                     "Loading... Please wait!!!", false, false);
         }
-            developerPresenter.getDevelopers();
+            developerPresenter.getDevelopers(location, limit);
     }
 
     /**

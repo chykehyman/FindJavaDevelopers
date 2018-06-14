@@ -40,12 +40,18 @@ public class DeveloperPresenter {
     }
 
     /**
-     * Communicates with github service class to receive list of java developers
+     * Communicates with github service class to receive list of java developers.
+     *
+     * @param location - string representing selected city
+     * @param limit - string representing selected limit(number of developers to fetch)
      */
-    public void getDevelopers() {
+    public void getDevelopers(String location, String limit) {
+        String url = "search/users?q=language:java+location:"
+                + location + "&per_page=" + limit + "&sort=followers";
+
         developerService
             .getAPI()
-            .getDevelopersLists()
+            .getDevelopersLists(url)
             .enqueue(new Callback<DevelopersListResponse>() {
 
                 /**
