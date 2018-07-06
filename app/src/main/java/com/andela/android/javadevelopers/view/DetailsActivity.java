@@ -17,15 +17,30 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * The type Details activity.
+ */
 public class DetailsActivity extends AppCompatActivity {
     private String devProfileImage;
     private String devUsername;
-    private String devGithubLink;
+    private String devGitHubLink;
 
+    /**
+     * The Profile image.
+     */
     @BindView(R.id.profile_image_header) ImageView profileImage;
+    /**
+     * The Username.
+     */
     @BindView(R.id.username) TextView username;
+    /**
+     * The Github link.
+     */
     @BindView(R.id.github_url) TextView githubLink;
 
+    /**
+     * The Toolbar.
+     */
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
@@ -41,13 +56,16 @@ public class DetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
 
         Intent intent = getIntent();
-        devProfileImage = intent.getStringExtra("PROFILE_IMAGE");
-        devUsername = intent.getStringExtra("USER_NAME");
-        devGithubLink = intent.getStringExtra("GITHUB_LINK");
+        devProfileImage = intent.getStringExtra("profileImage");
+        devUsername = intent.getStringExtra("username");
+        devGitHubLink = intent.getStringExtra("gitHubLink");
 
         displayProfile();
     }
 
+    /**
+     * Displays user profile in view.
+     */
     private void displayProfile() {
         username.setText(devUsername);
 
@@ -56,13 +74,18 @@ public class DetailsActivity extends AppCompatActivity {
                 .placeholder(R.drawable.no_profile)
                 .into(profileImage);
 
-        githubLink.setText(devGithubLink);
+        githubLink.setText(devGitHubLink);
     }
 
+    /**
+     * Generates and return share intent.
+     *
+     * @return - share intent
+     */
     private Intent createShareIntent() {
         StringBuilder shareMessage = new StringBuilder();
         shareMessage.append(getString(R.string.share_part_message))
-                .append(devUsername).append(", ").append(devGithubLink);
+                .append(devUsername).append(", ").append(devGitHubLink);
 
         return ShareCompat.IntentBuilder.from(this)
                 .setType(getString(R.string.share_intent_type))

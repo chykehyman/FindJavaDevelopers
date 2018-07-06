@@ -19,12 +19,31 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * The type Location activity.
+ */
 public final class LocationActivity extends AppCompatActivity {
+    /**
+     * The List of cities.
+     */
     List<String> listOfCities = new ArrayList<>();
+    /**
+     * The List of limit.
+     */
     List<String> listOfLimit = new ArrayList<>();
 
-    public static String city, limit;
+    /**
+     * The city to display its developers.
+     */
+    public static String city,
+    /**
+     * The Limit for number of developer to display.
+     */
+    limit;
 
+    /**
+     * The Intent.
+     */
     Intent intent;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -41,8 +60,11 @@ public final class LocationActivity extends AppCompatActivity {
         setUpSpinner(R.id.spinner_limit, listOfLimit, "limit", "10", "50", "100");
     }
 
+    /**
+     * Launch the main activity with required intents.
+     */
     @OnClick(R.id.button)
-    public void lauchActivityWithIntent() {
+    public void launchActivityWithIntent() {
         intent
                 .putExtra("city", city)
                 .putExtra("limit", limit);

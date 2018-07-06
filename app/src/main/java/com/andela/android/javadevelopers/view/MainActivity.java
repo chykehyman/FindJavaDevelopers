@@ -29,24 +29,60 @@ import butterknife.ButterKnife;
  * Application entry point activity
  */
 public class MainActivity extends AppCompatActivity implements DeveloperPresenter.View {
+    /**
+     * The Developers list.
+     */
     public ArrayList<DevelopersList> developersList;
+    /**
+     * The Developer presenter.
+     */
     DeveloperPresenter developerPresenter = new DeveloperPresenter(this);
+    /**
+     * The Network connectivity checker class.
+     */
     CheckNetworkConnection cnc;
+    /**
+     * Boolean variable that represents if there is network connection or not.
+     */
     Boolean isConnected;
 
+    /**
+     * The SnackBar object.
+     */
     Snackbar snackbar;
 
+    /**
+     * The Developers list key constant.
+     */
     static final String DEVELOPERS_LIST = "saved_state";
 
+    /**
+     * The Recycler view.
+     */
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
 
+    /**
+     * The Layout manager.
+     */
     RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
 
+    /**
+     * The Progress dialog.
+     */
     ProgressDialog progressDialog;
 
+    /**
+     * The Swipe refresh layout.
+     */
     @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
 
-    String location, limit;
+    /**
+     * The Location.
+     */
+    String location, /**
+     * The Limit.
+     */
+    limit;
 
     /**
      * Called upon start of application
