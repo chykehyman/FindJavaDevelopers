@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import com.andela.android.javadevelopers.R;
@@ -17,13 +16,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public final class LocationActivity extends AppCompatActivity {
     List<String> listOfCities = new ArrayList<>();
     List<String> listOfLimit = new ArrayList<>();
 
     public static String city, limit;
 
-    Button findDevelopersButton;
     Intent intent;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -32,22 +33,20 @@ public final class LocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
+        ButterKnife.bind(this);
+
         intent = new Intent(this, MainActivity.class);
-
-        findDevelopersButton = findViewById(R.id.button);
-
-        findDevelopersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent
-                        .putExtra("city", city)
-                        .putExtra("limit", limit);
-                startActivity(intent);
-            }
-        });
 
         setUpSpinner(R.id.spinner_city, listOfCities, "city", "lagos", "nairobi", "kampala");
         setUpSpinner(R.id.spinner_limit, listOfLimit, "limit", "10", "50", "100");
+    }
+
+    @OnClick(R.id.button)
+    public void lauchActivityWithIntent() {
+        intent
+                .putExtra("city", city)
+                .putExtra("limit", limit);
+        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
