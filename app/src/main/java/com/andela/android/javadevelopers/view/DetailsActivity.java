@@ -14,22 +14,31 @@ import android.support.v7.widget.Toolbar;
 import com.andela.android.javadevelopers.R;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailsActivity extends AppCompatActivity {
-    private String devProfileImage = "";
-    private String devUsername = "";
-    private String devGithubLink = "";
+    private String devProfileImage;
+    private String devUsername;
+    private String devGithubLink;
+
+    @BindView(R.id.profile_image_header) ImageView profileImage;
+    @BindView(R.id.username) TextView username;
+    @BindView(R.id.github_url) TextView githubLink;
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
-
 
         Intent intent = getIntent();
         devProfileImage = intent.getStringExtra("PROFILE_IMAGE");
@@ -40,14 +49,13 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void displayProfile() {
-        ImageView profileImage = findViewById(R.id.profile_image_header);
-        TextView username = findViewById(R.id.username);
-        TextView githubLink = findViewById(R.id.github_url);
         username.setText(devUsername);
+
         Picasso.with(this)
                 .load(devProfileImage)
                 .placeholder(R.drawable.no_profile)
                 .into(profileImage);
+
         githubLink.setText(devGithubLink);
     }
 
@@ -55,6 +63,7 @@ public class DetailsActivity extends AppCompatActivity {
         StringBuilder shareMessage = new StringBuilder();
         shareMessage.append(getString(R.string.share_part_message))
                 .append(devUsername).append(", ").append(devGithubLink);
+
         return ShareCompat.IntentBuilder.from(this)
                 .setType(getString(R.string.share_intent_type))
                 .setText(shareMessage)

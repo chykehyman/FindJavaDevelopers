@@ -21,6 +21,9 @@ import com.andela.android.javadevelopers.util.CheckNetworkConnection;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 /**
  * Application entry point activity
@@ -35,10 +38,13 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
 
     static final String DEVELOPERS_LIST = "saved_state";
 
-    RecyclerView recyclerView;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+
     RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
+
     ProgressDialog progressDialog;
-    SwipeRefreshLayout swipeRefreshLayout;
+
+    @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
 
     String location, limit;
 
@@ -51,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
 
         setSwipeRefreshLayout();
 
@@ -96,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
     public void displayDevelopersList(ArrayList<DevelopersList> listOfDevelopers) {
         developersList = listOfDevelopers;
 
-        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(layoutManager);
@@ -120,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
             progressDialog.dismiss();
         }
 
-        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+        if (swipeRefreshLayout.isRefreshing()) {
             if ("success".equalsIgnoreCase(fetchStatus)) {
                 swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(this, "Developers list refreshed",
@@ -147,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements DeveloperPresente
      * Initializes the SwipeRefreshLayout and sets an onRefresh listener
      */
     private void setSwipeRefreshLayout() {
-        swipeRefreshLayout = findViewById(R.id.swipe_container);
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
