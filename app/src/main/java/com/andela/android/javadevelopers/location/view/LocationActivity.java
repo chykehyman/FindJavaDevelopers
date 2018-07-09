@@ -1,4 +1,4 @@
-package com.andela.android.javadevelopers.view;
+package com.andela.android.javadevelopers.location.view;
 
 import android.content.Intent;
 import android.os.Build;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.andela.android.javadevelopers.R;
+import com.andela.android.javadevelopers.home.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;

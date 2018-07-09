@@ -3,7 +3,7 @@ package com.andela.android.javadevelopers;
 import android.app.Activity;
 import android.app.ProgressDialog;
 
-import com.andela.android.javadevelopers.view.MainActivity;
+import com.andela.android.javadevelopers.home.view.MainActivity;
 
 import org.junit.Before;
 import org.junit.Test;

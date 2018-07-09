@@ -1,4 +1,4 @@
-package com.andela.android.javadevelopers.view;
+package com.andela.android.javadevelopers.details.view;
 
 import android.content.Intent;
 import android.support.v4.app.ShareCompat;

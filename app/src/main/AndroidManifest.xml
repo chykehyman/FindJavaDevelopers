@@ -12,28 +12,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.LocationActivity">
+        <activity android:name=".location.view.LocationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".home.view.MainActivity">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".view.LocationActivity" />
+            android:value=".location.view.LocationActivity" />
         </activity>
         <activity
-            android:name=".view.DetailsActivity"
+            android:name=".details.view.DetailsActivity"
             android:label="@string/details_name"
-            android:parentActivityName=".view.MainActivity"
+            android:parentActivityName=".home.view.MainActivity"
             android:theme="@style/ProfileTheme">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainActivity" />
+                android:value=".home.view.MainActivity" />
         </activity>
     </application>
 
