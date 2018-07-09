@@ -1,9 +1,9 @@
-package com.andela.android.javadevelopers.presenter;
+package com.andela.android.javadevelopers.home.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.andela.android.javadevelopers.model.DevelopersList;
-import com.andela.android.javadevelopers.model.DevelopersListResponse;
+import com.andela.android.javadevelopers.home.model.DevelopersList;
+import com.andela.android.javadevelopers.home.model.DevelopersListResponse;
 import com.andela.android.javadevelopers.service.DeveloperService;
 
 import java.util.ArrayList;

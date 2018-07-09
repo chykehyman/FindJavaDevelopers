@@ -1,4 +1,4 @@
-package com.andela.android.javadevelopers.adapter;
+package com.andela.android.javadevelopers.home.adapter;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andela.android.javadevelopers.R;
-import com.andela.android.javadevelopers.model.DevelopersList;
-import com.andela.android.javadevelopers.view.DetailsActivity;
+import com.andela.android.javadevelopers.home.model.DevelopersList;
+import com.andela.android.javadevelopers.details.view.DetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

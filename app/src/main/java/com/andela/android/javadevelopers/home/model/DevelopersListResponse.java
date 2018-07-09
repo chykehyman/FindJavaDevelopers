@@ -1,4 +1,4 @@
-package com.andela.android.javadevelopers.model;
+package com.andela.android.javadevelopers.home.model;
 
 import com.google.gson.annotations.SerializedName;
 

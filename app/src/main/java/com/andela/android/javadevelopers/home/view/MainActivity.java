@@ -1,4 +1,4 @@
-package com.andela.android.javadevelopers.view;
+package com.andela.android.javadevelopers.home.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,9 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andela.android.javadevelopers.R;
-import com.andela.android.javadevelopers.adapter.ListAdapter;
-import com.andela.android.javadevelopers.model.DevelopersList;
-import com.andela.android.javadevelopers.presenter.DeveloperPresenter;
+import com.andela.android.javadevelopers.home.adapter.ListAdapter;
+import com.andela.android.javadevelopers.home.model.DevelopersList;
+import com.andela.android.javadevelopers.home.presenter.DeveloperPresenter;
 import com.andela.android.javadevelopers.util.CheckNetworkConnection;
 
 import java.util.ArrayList;

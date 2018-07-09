@@ -1,4 +1,4 @@
-package com.andela.android.javadevelopers.model;
+package com.andela.android.javadevelopers.home.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
