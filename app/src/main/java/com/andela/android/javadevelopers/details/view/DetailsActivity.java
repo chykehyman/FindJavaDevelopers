@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
 import com.andela.android.javadevelopers.R;
+import com.andela.android.javadevelopers.home.model.DevelopersList;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -28,20 +29,24 @@ public class DetailsActivity extends AppCompatActivity {
     /**
      * The Profile image.
      */
-    @BindView(R.id.profile_image_header) ImageView profileImage;
+    @BindView(R.id.profile_image_header)
+    ImageView profileImage;
     /**
      * The Username.
      */
-    @BindView(R.id.username) TextView username;
+    @BindView(R.id.username)
+    TextView username;
     /**
      * The Github link.
      */
-    @BindView(R.id.github_url) TextView githubLink;
+    @BindView(R.id.github_url)
+    TextView githubLink;
 
     /**
      * The Toolbar.
      */
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +60,11 @@ public class DetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
 
-        Intent intent = getIntent();
-        devProfileImage = intent.getStringExtra("profileImage");
-        devUsername = intent.getStringExtra("username");
-        devGitHubLink = intent.getStringExtra("gitHubLink");
+        DevelopersList developersList = getIntent().getParcelableExtra("devDetails");
+
+        devProfileImage = developersList.getProfileImage();
+        devUsername = developersList.getUsername();
+        devGitHubLink = developersList.getGithubLink();
 
         displayProfile();
     }

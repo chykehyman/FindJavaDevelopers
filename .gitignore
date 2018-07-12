@@ -69,3 +69,5 @@ instapk.log*
 .hgignore
 app/libs/
 instapk.properties
+/.idea/checkstyle-idea.xml
+app/src/main/res/share/
