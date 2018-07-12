@@ -1,91 +1,70 @@
 package com.andela.android.javadevelopers.home.presenter;
 
-import android.support.annotation.NonNull;
-
+import com.andela.android.javadevelopers.home.contract.HomeContract;
 import com.andela.android.javadevelopers.home.model.DevelopersList;
-import com.andela.android.javadevelopers.home.model.DevelopersListResponse;
-import com.andela.android.javadevelopers.service.DeveloperService;
+import com.andela.android.javadevelopers.util.CheckNetworkConnection;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
- * Created by chike on 13/03/2018.
+ * The type Developer presenter.
  */
-
-
-public class DeveloperPresenter {
-    private DeveloperService developerService;
-    private final View view;
+public class DeveloperPresenter implements HomeContract.HomePresenter,
+        HomeContract.GetDevelopersIntractor.OnFinishedListener {
+    private final HomeContract.HomeView view;
+    private final HomeContract.GetDevelopersIntractor getDevelopersIntractor;
 
     /**
-     * @param view - MainActivity's view context
+     * Instantiates a new Developer presenter.
+     *
+     * @param view                   - MainActivity's view context
+     * @param getDevelopersIntractor the get developers intractor
      */
-    public DeveloperPresenter(View view) {
+    public DeveloperPresenter(HomeContract.HomeView view,
+                              HomeContract.GetDevelopersIntractor getDevelopersIntractor) {
         this.view = view;
-        if (this.developerService == null) {
-            this.developerService = new DeveloperService();
-        }
-    }
-
-    /**
-     * Interface implementable by its view activity (MainActivity)
-     */
-    public interface View {
-        void displayDevelopersList(ArrayList<DevelopersList> list);
-        void dismissDialog(String fetchStatus);
+        this.getDevelopersIntractor = getDevelopersIntractor;
     }
 
     /**
      * Communicates with github service class to receive list of java developers.
      *
      * @param location - string representing selected city
-     * @param limit - string representing selected limit(number of developers to fetch)
+     * @param limit    - string representing selected limit(number of developers to fetch)
      */
-    public void getDevelopers(String location, String limit) {
+    @Override
+    public void requestDataFromServer(String location, String limit) {
         String url = "search/users?q=language:java+location:"
                 + location + "&per_page=" + limit + "&sort=followers";
 
-        developerService
-            .getAPI()
-            .getDevelopersLists(url)
-            .enqueue(new Callback<DevelopersListResponse>() {
+        view.showLoader();
 
-                /**
-                 * Receives response promise and calls the display developers method
-                 *
-                 * @param call     - retrofit http network instance
-                 * @param response - array(object) response/feedback promise
-                 */
-                @Override
-                public void onResponse(@NonNull Call<DevelopersListResponse> call,
-                                       @NonNull Response<DevelopersListResponse> response) {
+        getDevelopersIntractor.getDevelopersArrayList(url, this);
+    }
 
-                    DevelopersListResponse developersResponse = response.body();
-                    ArrayList<DevelopersList> developersList;
+    /**
+     * Check network connection.
+     */
+    @Override
+    public Boolean checkNetworkConnection() {
+        return CheckNetworkConnection.getConnectivityStatus(view.getViewContext());
+    }
 
-                    assert developersResponse != null;
+    @Override
+    public void onFinished(ArrayList<DevelopersList> list) {
+        if (view != null) {
+            view.displayDevelopersList(list);
+            view.hideLoader();
+        }
+    }
 
-                    developersList = developersResponse.getDevelopersLists();
-
-                    view.displayDevelopersList(developersList);
-                }
-
-                /**
-                 * Listens for request errors from api queries and dismisses any running dialogs
-                 *
-                 * @param call - retrofit http network instance
-                 * @param t    - exception error object
-                 */
-                @Override
-                public void onFailure(@NonNull Call<DevelopersListResponse> call,
-                                      @NonNull Throwable t) {
-
-                      view.dismissDialog("failure");
-                }
-            });
+    @Override
+    public void onFailure(Throwable t) {
+        if (view != null) {
+            view.hideLoader();
+            view.showSnackBar();
+            view.hideSwipeRefresh("failure");
+        }
     }
 }

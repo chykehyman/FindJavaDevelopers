@@ -1,6 +1,5 @@
 package com.andela.android.javadevelopers.home.adapter;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andela.android.javadevelopers.R;
+import com.andela.android.javadevelopers.home.contract.HomeContract;
 import com.andela.android.javadevelopers.home.model.DevelopersList;
-import com.andela.android.javadevelopers.details.view.DetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ import butterknife.ButterKnife;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private final ArrayList<DevelopersList> developersLists;
+    private final HomeContract.RecyclerItemClickListener recyclerItemClickListener;
 
 
     /**
@@ -33,8 +33,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
      *
      * @param developersLists the developers lists
      */
-    public ListAdapter(ArrayList<DevelopersList> developersLists) {
+    public ListAdapter(ArrayList<DevelopersList> developersLists,
+                       HomeContract.RecyclerItemClickListener recyclerItemClickListener) {
         this.developersLists = developersLists;
+        this.recyclerItemClickListener = recyclerItemClickListener;
     }
 
     /**
@@ -71,10 +73,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final String profileImage = developersLists.get(position).getProfileImage();
         final String userName = developersLists.get(position).getUsername();
-        final String gitHubLink = developersLists.get(position).getGithubLink();
 
         holder.username.setText(userName);
 
@@ -86,11 +87,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), DetailsActivity.class);
-                intent.putExtra("profileImage", profileImage);
-                intent.putExtra("username", userName);
-                intent.putExtra("gitHubLink", gitHubLink);
-                view.getContext().startActivity(intent);
+                recyclerItemClickListener
+                        .onItemClick(developersLists.get(holder.getAdapterPosition()));
             }
         });
 

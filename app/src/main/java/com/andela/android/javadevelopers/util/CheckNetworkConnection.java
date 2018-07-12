@@ -6,28 +6,23 @@ import android.net.NetworkInfo;
 
 
 /**
- * Created by chike on 22/03/2018.
+ * The type Check network connection.
  */
-
-
-public class CheckNetworkConnection {
-    private final Context context;
-
+public final class CheckNetworkConnection {
     /**
-     * Constructor
-     *
-     * @param context - activity context
+     * Private Constructor.
      */
-    public CheckNetworkConnection(Context context) {
-        this.context = context;
+    private CheckNetworkConnection() {
+        // intentionally left blank
     }
 
     /**
-     * Checks network/internet connectivity state
+     * Checks network/internet connectivity state.
      *
+     * @param context the context
      * @return - true or false depending on network connectivity state
      */
-    public Boolean getConnectivityStatus() {
+    public static Boolean getConnectivityStatus(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 

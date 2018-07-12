@@ -19,14 +19,12 @@ public class CheckNetworkConnectionTest {
     private Context context;
     private NetworkInfo networkInfo;
     private ConnectivityManager cnManager;
-    private CheckNetworkConnection checkNetworkConnection;
 
     @Before
     public void setUp() throws Exception {
         context = Mockito.mock(Context.class);
         networkInfo = Mockito.mock(NetworkInfo.class);
         cnManager = Mockito.mock(ConnectivityManager.class);
-        checkNetworkConnection = new CheckNetworkConnection(context);
 
     }
 
@@ -36,7 +34,7 @@ public class CheckNetworkConnectionTest {
         Mockito.when(cnManager.getActiveNetworkInfo()).thenReturn(networkInfo);
         Mockito.when(networkInfo.isConnectedOrConnecting()).thenReturn(true);
 
-        Assert.assertTrue(checkNetworkConnection.getConnectivityStatus());
+        Assert.assertTrue(CheckNetworkConnection.getConnectivityStatus(context));
 
         Mockito.verify(networkInfo).isConnectedOrConnecting();
 
@@ -48,7 +46,7 @@ public class CheckNetworkConnectionTest {
         Mockito.when(cnManager.getActiveNetworkInfo()).thenReturn(networkInfo);
         Mockito.when(networkInfo.isConnectedOrConnecting()).thenReturn(false);
 
-        Assert.assertFalse(checkNetworkConnection.getConnectivityStatus());
+        Assert.assertFalse(CheckNetworkConnection.getConnectivityStatus(context));
 
         Mockito.verify(networkInfo).isConnectedOrConnecting();
 
@@ -59,6 +57,6 @@ public class CheckNetworkConnectionTest {
         Mockito.when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(cnManager);
         Mockito.when(cnManager.getActiveNetworkInfo()).thenReturn(null);
 
-        Assert.assertFalse(checkNetworkConnection.getConnectivityStatus());
+        Assert.assertFalse(CheckNetworkConnection.getConnectivityStatus(context));
     }
 }
