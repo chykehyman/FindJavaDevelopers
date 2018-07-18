@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import com.andela.android.javadevelopers.R;
 import com.andela.android.javadevelopers.home.contract.HomeContract;
-import com.andela.android.javadevelopers.home.model.DevelopersList;
+import com.andela.android.javadevelopers.home.model.GitHubUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,21 +24,21 @@ import butterknife.ButterKnife;
 /**
  * The type List adapter.
  */
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+public class GitHubUsersAdapter extends RecyclerView.Adapter<GitHubUsersAdapter.ViewHolder> {
 
-    private final ArrayList<DevelopersList> developersLists;
+    private final ArrayList<GitHubUser> gitHubUsers;
     private final HomeContract.RecyclerItemClickListener recyclerItemClickListener;
 
 
     /**
      * Instantiates a new List adapter.
      *
-     * @param developersLists the developers lists
+     * @param recyclerItemClickListener the recycler item click listener
      */
-    public ListAdapter(ArrayList<DevelopersList> developersLists,
-                       HomeContract.RecyclerItemClickListener recyclerItemClickListener) {
-        this.developersLists = developersLists;
+    @Inject
+    public GitHubUsersAdapter(HomeContract.RecyclerItemClickListener recyclerItemClickListener) {
         this.recyclerItemClickListener = recyclerItemClickListener;
+        this.gitHubUsers = new ArrayList<>();
     }
 
     /**
@@ -74,8 +76,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final String profileImage = developersLists.get(position).getProfileImage();
-        final String userName = developersLists.get(position).getUsername();
+        final String profileImage = gitHubUsers.get(position).getProfileImage();
+        final String userName = gitHubUsers.get(position).getUsername();
 
         holder.username.setText(userName);
 
@@ -84,19 +86,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 .placeholder(R.drawable.no_profile)
                 .into(holder.profileImage);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recyclerItemClickListener
-                        .onItemClick(developersLists.get(holder.getAdapterPosition()));
-            }
-        });
+        holder.itemView.setOnClickListener(view -> recyclerItemClickListener
+                .onItemClick(gitHubUsers.get(holder.getAdapterPosition())));
 
     }
 
     @Override
     public int getItemCount() {
-        return developersLists.size();
+        return gitHubUsers.size();
+    }
+
+    public void setData(ArrayList<GitHubUser> gitHubUsers) {
+        this.gitHubUsers.addAll(gitHubUsers);
+        notifyDataSetChanged();
     }
 
 }

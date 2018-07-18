@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
 import com.andela.android.javadevelopers.R;
-import com.andela.android.javadevelopers.home.model.DevelopersList;
+import com.andela.android.javadevelopers.home.model.GitHubUser;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -60,11 +60,11 @@ public class DetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
 
-        DevelopersList developersList = getIntent().getParcelableExtra("devDetails");
+        GitHubUser gitHubUser = getIntent().getParcelableExtra("devDetails");
 
-        devProfileImage = developersList.getProfileImage();
-        devUsername = developersList.getUsername();
-        devGitHubLink = developersList.getGithubLink();
+        devProfileImage = gitHubUser.getProfileImage();
+        devUsername = gitHubUser.getUsername();
+        devGitHubLink = gitHubUser.getGithubLink();
 
         displayProfile();
     }

@@ -14,35 +14,43 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andela.android.javadevelopers.BuildConfig;
 import com.andela.android.javadevelopers.R;
+import com.andela.android.javadevelopers.dagger.application.App;
+import com.andela.android.javadevelopers.dagger.component.AppComponent;
+import com.andela.android.javadevelopers.dagger.component.DaggerMainActivityComponent;
+import com.andela.android.javadevelopers.dagger.component.MainActivityComponent;
+import com.andela.android.javadevelopers.dagger.module.ApiModule;
+import com.andela.android.javadevelopers.dagger.module.GitHubAdapterModule;
+import com.andela.android.javadevelopers.dagger.module.MainActivityContextModule;
+import com.andela.android.javadevelopers.dagger.qualifier.ActivityContext;
+import com.andela.android.javadevelopers.dagger.qualifier.ApplicationContext;
 import com.andela.android.javadevelopers.details.view.DetailsActivity;
-import com.andela.android.javadevelopers.home.adapter.ListAdapter;
-import com.andela.android.javadevelopers.home.contract.HomeContract;
+import com.andela.android.javadevelopers.home.adapter.GitHubUsersAdapter;
+import com.andela.android.javadevelopers.home.api.GitHubApi;
 import com.andela.android.javadevelopers.home.contract.HomeContract.HomePresenter;
 import com.andela.android.javadevelopers.home.contract.HomeContract.RecyclerItemClickListener;
-import com.andela.android.javadevelopers.home.model.DevelopersList;
-import com.andela.android.javadevelopers.home.model.GetDevelopersIntractorImpl;
-import com.andela.android.javadevelopers.home.presenter.DeveloperPresenter;
+import com.andela.android.javadevelopers.home.model.GitHubUser;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.andela.android.javadevelopers.home.contract.HomeContract.HomeView;
 
 
 /**
  * Application entry point activity
  */
-public class MainActivity extends AppCompatActivity implements HomeContract.HomeView {
+public class MainActivity extends AppCompatActivity implements HomeView, RecyclerItemClickListener {
     /**
      * The Developers list.
      */
-    public ArrayList<DevelopersList> developersList;
-    /**
-     * The Developer presenter.
-     */
-    HomePresenter developerPresenter = new DeveloperPresenter(this,
-            new GetDevelopersIntractorImpl());
+    public ArrayList<GitHubUser> gitHubUser;
+
     /**
      * Boolean variable that represents if there is network connection or not.
      */
@@ -89,6 +97,48 @@ public class MainActivity extends AppCompatActivity implements HomeContract.Home
     limit;
 
     /**
+     * The Main activity component.
+     */
+    MainActivityComponent mainActivityComponent;
+
+    /**
+     * The App context.
+     */
+    @Inject
+    @ApplicationContext
+    public Context appContext;
+
+    /**
+     * The Activity context.
+     */
+    @Inject
+    @ActivityContext
+    public Context activityContext;
+
+    /**
+     * The Developer presenter.
+     */
+    @Inject
+    HomePresenter developerPresenter;
+
+    /**
+     * The GitHub API interface.
+     */
+    @Inject
+    GitHubApi gitHubApi;
+
+    /**
+     * The Git hub users adapter.
+     */
+    @Inject
+    GitHubUsersAdapter gitHubUsersAdapter;
+
+    /**
+     * The Application saved state.
+     */
+    Bundle savedState;
+
+    /**
      * Called upon start of application
      *
      * @param savedInstanceState - a bundle of objects holding different application states
@@ -98,24 +148,32 @@ public class MainActivity extends AppCompatActivity implements HomeContract.Home
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
+        savedState = savedInstanceState;
 
-        setSwipeRefreshWidget();
+        ButterKnife.bind(this);
+        AppComponent appComponent = App.get(this).getAppComponent();
+        mainActivityComponent = DaggerMainActivityComponent.builder()
+                .mainActivityContextModule(new MainActivityContextModule(this))
+                .apiModule(new ApiModule(BuildConfig.BASEURL))
+                .gitHubAdapterModule(new GitHubAdapterModule())
+                .appComponent(appComponent)
+                .build();
+
+        mainActivityComponent.inject(this);
 
         Intent intent = getIntent();
         location = intent.getStringExtra("city");
         limit = intent.getStringExtra("limit");
 
-        if (savedInstanceState != null) {
-            developersList = savedInstanceState.getParcelableArrayList(DEVELOPERS_LIST);
-            displayDevelopersList(developersList);
-        } else {
-            if (developerPresenter.checkNetworkConnection()) {
-                developerPresenter.requestDataFromServer(location, limit);
-            } else {
-                displaySnackBar(R.string.no_connection, developersList);
-            }
-        }
+        setSwipeRefreshWidget();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        developerPresenter.setView(this);
+
+        requestDevelopersList(savedState);
     }
 
     /**
@@ -127,7 +185,26 @@ public class MainActivity extends AppCompatActivity implements HomeContract.Home
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putParcelableArrayList(DEVELOPERS_LIST, developersList);
+        outState.putParcelableArrayList(DEVELOPERS_LIST, gitHubUser);
+    }
+
+    /**
+     * Requests list od developers from api.
+     *
+     * @param savedInstanceState - current save application state
+     */
+    private void requestDevelopersList(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            gitHubUser = savedInstanceState.getParcelableArrayList(DEVELOPERS_LIST);
+            displayDevelopersList(gitHubUser);
+            setSwipeRefreshWidget();
+        } else {
+            if (developerPresenter.checkNetworkConnection()) {
+                developerPresenter.requestDataFromServer(gitHubApi, location, limit);
+            } else {
+                displaySnackBar(R.string.no_connection, gitHubUser);
+            }
+        }
     }
 
 
@@ -153,31 +230,22 @@ public class MainActivity extends AppCompatActivity implements HomeContract.Home
         }
     }
 
-    private final RecyclerItemClickListener recyclerItemClickListener =
-            new RecyclerItemClickListener() {
-        @Override
-        public void onItemClick(DevelopersList developersList) {
-            Intent intent = new Intent(getViewContext(), DetailsActivity.class);
-                intent.putExtra("devDetails", developersList);
-            startActivity(intent);
-
-        }
-    };
-
     /**
-     * Initializes recyclerview and sets the list of developers to ListAdapter class, for display
+     * Initializes recyclerview and sets the list of developers to GitHubUsersAdapter class.
      *
      * @param listOfDevelopers - array list of java developers
      */
     @Override
-    public void displayDevelopersList(ArrayList<DevelopersList> listOfDevelopers) {
-        developersList = listOfDevelopers;
+    public void displayDevelopersList(ArrayList<GitHubUser> listOfDevelopers) {
+        gitHubUser = listOfDevelopers;
 
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter adapter = new ListAdapter(developersList, recyclerItemClickListener);
+        gitHubUsersAdapter.setData(listOfDevelopers);
+
+        RecyclerView.Adapter adapter = gitHubUsersAdapter;
         recyclerView.setAdapter(adapter);
 
         hideSwipeRefresh("success");
@@ -195,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements HomeContract.Home
             networkStatus = R.string.fetch_failed;
         }
 
-        displaySnackBar(networkStatus, developersList);
+        displaySnackBar(networkStatus, gitHubUser);
     }
 
     /**
@@ -217,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements HomeContract.Home
         if (swipeRefreshLayout.isRefreshing()) {
             if ("success".equalsIgnoreCase(fetchStatus)) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(this, "Developers list refreshed",
+                Toast.makeText(activityContext, "Developers list refreshed",
                         Toast.LENGTH_LONG).show();
             } else {
                 swipeRefreshLayout.setRefreshing(false);
@@ -234,39 +302,33 @@ public class MainActivity extends AppCompatActivity implements HomeContract.Home
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                developerPresenter.requestDataFromServer(location, limit);
-            }
-        });
+        swipeRefreshLayout
+                .setOnRefreshListener(() -> developerPresenter
+                        .requestDataFromServer(gitHubApi, location, limit));
     }
 
     /**
      * Displays internet connectivity notifications
      *
      * @param internetStatus - contains current internet connectivity state
-     * @param developersList - array list of java developers
+     * @param gitHubUser     - array list of java developers
      */
     public void displaySnackBar(
-            int internetStatus, final ArrayList<DevelopersList> developersList) {
+            int internetStatus, final ArrayList<GitHubUser> gitHubUser) {
 
         CharSequence actionText = "CLOSE";
 
-        if (developersList == null) {
+        if (gitHubUser == null) {
             actionText = "TRY AGAIN";
         }
 
         snackbar = Snackbar
                 .make(swipeRefreshLayout, internetStatus, Snackbar.LENGTH_INDEFINITE)
-                .setAction(actionText, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (developersList != null) {
-                            hideSnackBar();
-                        } else {
-                            developerPresenter.requestDataFromServer(location, limit);
-                        }
+                .setAction(actionText, view -> {
+                    if (gitHubUser != null) {
+                        hideSnackBar();
+                    } else {
+                        developerPresenter.requestDataFromServer(gitHubApi, location, limit);
                     }
                 });
 
@@ -282,12 +344,24 @@ public class MainActivity extends AppCompatActivity implements HomeContract.Home
     }
 
     /**
-     * Gets context.
+     * Sets context.
      *
-     * @return the context
+     * @return the application view context
      */
     @Override
-    public Context getViewContext() {
-        return getApplicationContext();
+    public Context setViewContext() {
+        return appContext;
+    }
+
+    /**
+     * On item click.
+     *
+     * @param gitHubUser - the developers list
+     */
+    @Override
+    public void onItemClick(GitHubUser gitHubUser) {
+        Intent intent = new Intent(activityContext, DetailsActivity.class);
+        intent.putExtra("devDetails", gitHubUser);
+        startActivity(intent);
     }
 }

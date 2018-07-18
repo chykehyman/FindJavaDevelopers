@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by chike on 07/03/2018.
  */
 
-public class DevelopersList implements Parcelable {
+public class GitHubUser implements Parcelable {
     @SerializedName("login")
     private final String username;
 
@@ -37,7 +37,7 @@ public class DevelopersList implements Parcelable {
         return 0;
     }
 
-    protected DevelopersList(Parcel in) {
+    protected GitHubUser(Parcel in) {
         username = in.readString();
         profileImage = in.readString();
         githubLink = in.readString();
@@ -50,15 +50,15 @@ public class DevelopersList implements Parcelable {
         dest.writeString(githubLink);
     }
 
-    public static final Creator<DevelopersList> CREATOR = new Creator<DevelopersList>() {
+    public static final Creator<GitHubUser> CREATOR = new Creator<GitHubUser>() {
         @Override
-        public DevelopersList createFromParcel(Parcel in) {
-            return new DevelopersList(in);
+        public GitHubUser createFromParcel(Parcel in) {
+            return new GitHubUser(in);
         }
 
         @Override
-        public DevelopersList[] newArray(int size) {
-            return new DevelopersList[size];
+        public GitHubUser[] newArray(int size) {
+            return new GitHubUser[size];
         }
     };
 }

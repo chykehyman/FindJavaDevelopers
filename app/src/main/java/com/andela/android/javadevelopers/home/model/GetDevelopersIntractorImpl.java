@@ -3,7 +3,7 @@ package com.andela.android.javadevelopers.home.model;
 import android.support.annotation.NonNull;
 
 import com.andela.android.javadevelopers.home.contract.HomeContract;
-import com.andela.android.javadevelopers.service.DeveloperService;
+import com.andela.android.javadevelopers.home.api.GitHubApi;
 
 import java.util.ArrayList;
 
@@ -16,50 +16,48 @@ import retrofit2.Response;
  * The type Get developers intractor.
  */
 public class GetDevelopersIntractorImpl implements HomeContract.GetDevelopersIntractor {
-    /**
-     * Retrofit Service instance.
-     */
-    private final DeveloperService developerService = new DeveloperService();
 
     @Override
-    public void getDevelopersArrayList(String url, final OnFinishedListener onFinishedListener) {
-        developerService
-                .getAPI()
-                .getDevelopersLists(url)
-                .enqueue(new Callback<DevelopersListResponse>() {
+    public void getDevelopersArrayList(GitHubApi gitHubApi,
+                                       String url,
+                                       final OnFinishedListener onFinishedListener) {
 
-                    /**
-                     * Receives response promise and calls the display developers method
-                     *
-                     * @param call     - retrofit http network instance
-                     * @param response - array(object) response/feedback promise
-                     */
-                    @Override
-                    public void onResponse(@NonNull Call<DevelopersListResponse> call,
-                                           @NonNull Response<DevelopersListResponse> response) {
+        Call<GitHubUsersResponse> call = gitHubApi.getDevelopersLists(url);
 
-                        DevelopersListResponse developersResponse = response.body();
-                        ArrayList<DevelopersList> developersList;
+        call.enqueue(new Callback<GitHubUsersResponse>() {
 
-                        assert developersResponse != null;
+            /**
+             * Receives response promise and calls the display developers method
+             *
+             * @param call     - retrofit http network instance
+             * @param response - array(object) response/feedback promise
+             */
+            @Override
+            public void onResponse(@NonNull Call<GitHubUsersResponse> call,
+                                   @NonNull Response<GitHubUsersResponse> response) {
 
-                        developersList = developersResponse.getDevelopersLists();
+                GitHubUsersResponse developersResponse = response.body();
+                ArrayList<GitHubUser> gitHubUser;
 
-                        onFinishedListener.onFinished(developersList);
-                    }
+                assert developersResponse != null;
 
-                    /**
-                     * Listens for request errors from api queries and dismisses any running dialogs
-                     *
-                     * @param call - retrofit http network instance
-                     * @param t    - exception error object
-                     */
-                    @Override
-                    public void onFailure(@NonNull Call<DevelopersListResponse> call,
-                                          @NonNull Throwable t) {
-                        onFinishedListener.onFailure(t);
-                    }
-                });
+                gitHubUser = developersResponse.getGitHubUsers();
+
+                onFinishedListener.onFinished(gitHubUser);
+            }
+
+            /**
+             * Listens for request errors from api queries and dismisses any running dialogs
+             *
+             * @param call - retrofit http network instance
+             * @param t    - exception error object
+             */
+            @Override
+            public void onFailure(@NonNull Call<GitHubUsersResponse> call,
+                                  @NonNull Throwable t) {
+                onFinishedListener.onFailure(t);
+            }
+        });
 
     }
 }
