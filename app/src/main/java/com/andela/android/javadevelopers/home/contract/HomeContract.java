@@ -2,7 +2,8 @@ package com.andela.android.javadevelopers.home.contract;
 
 import android.content.Context;
 
-import com.andela.android.javadevelopers.home.model.DevelopersList;
+import com.andela.android.javadevelopers.home.model.GitHubUser;
+import com.andela.android.javadevelopers.home.api.GitHubApi;
 
 import java.util.ArrayList;
 
@@ -29,9 +30,9 @@ public interface HomeContract {
         /**
          * Display developers list.
          *
-         * @param list the list
+         * @param list the list of github users
          */
-        void displayDevelopersList(ArrayList<DevelopersList> list);
+        void displayDevelopersList(ArrayList<GitHubUser> list);
 
 
         /**
@@ -52,12 +53,11 @@ public interface HomeContract {
         void hideSwipeRefresh(String fetchStatus);
 
         /**
-         * Gets context.
+         * Sets context.
          *
-         * @return the context
+         * @return the application view context
          */
-        Context getViewContext();
-
+        Context setViewContext();
     }
 
     /**
@@ -65,12 +65,20 @@ public interface HomeContract {
      */
     interface HomePresenter {
         /**
-         * Communicates with github service class to receive list of java developers.
+         * Sets view.
          *
-         * @param location - string representing selected city
-         * @param limit    - string representing selected limit(number of developers to fetch)
+         * @param view - the view
          */
-        void requestDataFromServer(String location, String limit);
+        void setView(HomeView view);
+
+        /**
+         * Communicates with model interactor class to receive list of java developers.
+         *
+         * @param gitHubApi - the GitHub api
+         * @param location  - string representing selected city
+         * @param limit     - string representing selected limit(number of developers to fetch)
+         */
+        void requestDataFromServer(GitHubApi gitHubApi, String location, String limit);
 
         /**
          * Check network connection.
@@ -92,14 +100,14 @@ public interface HomeContract {
             /**
              * On finished.
              *
-             * @param list the list
+             * @param list - the list of github users
              */
-            void onFinished(ArrayList<DevelopersList> list);
+            void onFinished(ArrayList<GitHubUser> list);
 
             /**
              * On failure.
              *
-             * @param t the t
+             * @param t - the t
              */
             void onFailure(Throwable t);
         }
@@ -107,10 +115,13 @@ public interface HomeContract {
         /**
          * Gets developers array list.
          *
-         * @param url                the url
-         * @param onFinishedListener the on finished listener
+         * @param gitHubApi          - the GitHub api
+         * @param url                - the url
+         * @param onFinishedListener - the on finished listener
          */
-        void getDevelopersArrayList(String url, OnFinishedListener onFinishedListener);
+        void getDevelopersArrayList(GitHubApi gitHubApi,
+                                    String url,
+                                    OnFinishedListener onFinishedListener);
     }
 
     /**
@@ -121,8 +132,8 @@ public interface HomeContract {
         /**
          * On item click.
          *
-         * @param developersList the developers list
+         * @param gitHubUser - the developers list
          */
-        void onItemClick(DevelopersList developersList);
+        void onItemClick(GitHubUser gitHubUser);
     }
 }

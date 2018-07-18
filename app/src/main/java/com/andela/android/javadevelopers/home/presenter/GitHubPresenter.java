@@ -1,30 +1,37 @@
 package com.andela.android.javadevelopers.home.presenter;
 
 import com.andela.android.javadevelopers.home.contract.HomeContract;
-import com.andela.android.javadevelopers.home.model.DevelopersList;
+import com.andela.android.javadevelopers.home.model.GitHubUser;
+import com.andela.android.javadevelopers.home.api.GitHubApi;
 import com.andela.android.javadevelopers.util.CheckNetworkConnection;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 
 /**
  * The type Developer presenter.
  */
-public class DeveloperPresenter implements HomeContract.HomePresenter,
+public class GitHubPresenter implements HomeContract.HomePresenter,
         HomeContract.GetDevelopersIntractor.OnFinishedListener {
-    private final HomeContract.HomeView view;
-    private final HomeContract.GetDevelopersIntractor getDevelopersIntractor;
+
+    private HomeContract.HomeView view;
+    private final HomeContract.GetDevelopersIntractor intractor;
 
     /**
      * Instantiates a new Developer presenter.
      *
-     * @param view                   - MainActivity's view context
-     * @param getDevelopersIntractor the get developers intractor
+     * @param intractor the get developers intractor
      */
-    public DeveloperPresenter(HomeContract.HomeView view,
-                              HomeContract.GetDevelopersIntractor getDevelopersIntractor) {
+    @Inject
+    public GitHubPresenter(HomeContract.GetDevelopersIntractor intractor) {
+        this.intractor = intractor;
+    }
+
+    @Override
+    public void setView(HomeContract.HomeView view) {
         this.view = view;
-        this.getDevelopersIntractor = getDevelopersIntractor;
     }
 
     /**
@@ -34,25 +41,26 @@ public class DeveloperPresenter implements HomeContract.HomePresenter,
      * @param limit    - string representing selected limit(number of developers to fetch)
      */
     @Override
-    public void requestDataFromServer(String location, String limit) {
+    public void requestDataFromServer(GitHubApi gitHubApi, String location, String limit) {
         String url = "search/users?q=language:java+location:"
                 + location + "&per_page=" + limit + "&sort=followers";
 
         view.showLoader();
 
-        getDevelopersIntractor.getDevelopersArrayList(url, this);
+        intractor.getDevelopersArrayList(gitHubApi, url, this);
     }
 
+    // Todo: Remove context from here and pass directly to view.
     /**
      * Check network connection.
      */
     @Override
     public Boolean checkNetworkConnection() {
-        return CheckNetworkConnection.getConnectivityStatus(view.getViewContext());
+        return CheckNetworkConnection.getConnectivityStatus(view.setViewContext());
     }
 
     @Override
-    public void onFinished(ArrayList<DevelopersList> list) {
+    public void onFinished(ArrayList<GitHubUser> list) {
         if (view != null) {
             view.displayDevelopersList(list);
             view.hideLoader();

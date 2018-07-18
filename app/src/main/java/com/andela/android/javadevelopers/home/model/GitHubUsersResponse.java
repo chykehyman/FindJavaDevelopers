@@ -8,11 +8,11 @@ import java.util.ArrayList;
  * Created by chike on 12/03/2018.
  */
 
-public class DevelopersListResponse {
+public class GitHubUsersResponse {
     @SerializedName("items")
-    private ArrayList<DevelopersList> developersLists;
+    private final ArrayList<GitHubUser> gitHubUsers = new ArrayList<>();
 
-    public ArrayList<DevelopersList> getDevelopersLists() {
-        return developersLists;
+    ArrayList<GitHubUser> getGitHubUsers() {
+        return gitHubUsers;
     }
 }

@@ -3,7 +3,6 @@ package com.andela.android.javadevelopers.location.view;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,7 +46,6 @@ public final class LocationActivity extends AppCompatActivity {
      */
     Intent intent;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +70,14 @@ public final class LocationActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    /**
+     * Sets up and load data unto spinner
+     *
+     * @param id - resource id of either spinner component
+     * @param spinnerDropdown - spinner component
+     * @param selectedSpinner - element spinner item
+     * @param elements - string of items to populate spinner with
+     */
     private void setUpSpinner(
             int id, List<String> spinnerDropdown,
             final String selectedSpinner,
@@ -89,7 +94,9 @@ public final class LocationActivity extends AppCompatActivity {
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner.setElevation(5);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            spinner.setElevation(5);
+        }
 
         // attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
