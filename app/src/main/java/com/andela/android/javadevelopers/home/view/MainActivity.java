@@ -31,6 +31,7 @@ import com.andela.android.javadevelopers.home.api.GitHubApi;
 import com.andela.android.javadevelopers.home.contract.HomeContract.HomePresenter;
 import com.andela.android.javadevelopers.home.contract.HomeContract.RecyclerItemClickListener;
 import com.andela.android.javadevelopers.home.model.GitHubUser;
+import com.andela.android.javadevelopers.util.CheckNetworkConnection;
 
 import java.util.ArrayList;
 
@@ -188,6 +189,14 @@ public class MainActivity extends AppCompatActivity implements HomeView, Recycle
         outState.putParcelableArrayList(DEVELOPERS_LIST, gitHubUser);
     }
 
+
+    /**
+     * Check network connection.
+     */
+    public Boolean checkNetworkConnection() {
+        return CheckNetworkConnection.getConnectivityStatus(activityContext);
+    }
+
     /**
      * Requests list od developers from api.
      *
@@ -199,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, Recycle
             displayDevelopersList(gitHubUser);
             setSwipeRefreshWidget();
         } else {
-            if (developerPresenter.checkNetworkConnection()) {
+            if (checkNetworkConnection()) {
                 developerPresenter.requestDataFromServer(gitHubApi, location, limit);
             } else {
                 displaySnackBar(R.string.no_connection, gitHubUser);
@@ -256,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, Recycle
      */
     @Override
     public void showSnackBar() {
-        isConnected = developerPresenter.checkNetworkConnection();
+        isConnected = checkNetworkConnection();
 
         int networkStatus = R.string.no_connection;
         if (isConnected) {

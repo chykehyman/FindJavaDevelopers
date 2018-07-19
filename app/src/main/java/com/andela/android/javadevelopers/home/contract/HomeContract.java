@@ -79,13 +79,6 @@ public interface HomeContract {
          * @param limit     - string representing selected limit(number of developers to fetch)
          */
         void requestDataFromServer(GitHubApi gitHubApi, String location, String limit);
-
-        /**
-         * Check network connection.
-         *
-         * @return the boolean
-         */
-        Boolean checkNetworkConnection();
     }
 
     /**

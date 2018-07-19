@@ -1,9 +1,8 @@
 package com.andela.android.javadevelopers.home.presenter;
 
+import com.andela.android.javadevelopers.home.api.GitHubApi;
 import com.andela.android.javadevelopers.home.contract.HomeContract;
 import com.andela.android.javadevelopers.home.model.GitHubUser;
-import com.andela.android.javadevelopers.home.api.GitHubApi;
-import com.andela.android.javadevelopers.util.CheckNetworkConnection;
 
 import java.util.ArrayList;
 
@@ -48,15 +47,6 @@ public class GitHubPresenter implements HomeContract.HomePresenter,
         view.showLoader();
 
         intractor.getDevelopersArrayList(gitHubApi, url, this);
-    }
-
-    // Todo: Remove context from here and pass directly to view.
-    /**
-     * Check network connection.
-     */
-    @Override
-    public Boolean checkNetworkConnection() {
-        return CheckNetworkConnection.getConnectivityStatus(view.setViewContext());
     }
 
     @Override
