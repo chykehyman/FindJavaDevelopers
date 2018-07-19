@@ -4,6 +4,7 @@ import com.andela.android.javadevelopers.dagger.scope.ActivityScope;
 import com.andela.android.javadevelopers.home.api.GitHubApi;
 import com.andela.android.javadevelopers.home.model.GetDevelopersIntractorImpl;
 import com.andela.android.javadevelopers.home.presenter.GitHubPresenter;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -72,7 +73,7 @@ public class ApiModule {
     @Provides
     HttpLoggingInterceptor provideHttpLoggingInterceptor() {
         HttpLoggingInterceptor logger = new HttpLoggingInterceptor();
-        return logger.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return logger.setLevel(HttpLoggingInterceptor.Level.HEADERS);
     }
 
     /**
@@ -105,6 +106,7 @@ public class ApiModule {
                 .baseUrl(mBaseUrl)
                 .client(okHttpClient)
                 .addConverterFactory(gsonConverterFactory)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 
