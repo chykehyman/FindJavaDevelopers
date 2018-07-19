@@ -25,3 +25,48 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    designSupportVerion = '27.1.1'
+    appcompatSupportVersion = '27.1.1'
+    annotationsSupportVersion = '27.1.1'
+
+    // layouts
+    constraintLayoutVersion = '1.1.2'
+    recyclerviewVersion = '27.1.1'
+    cardviewVersion = '27.1.1'
+
+    // test runners
+    junitVersion = '4.12'
+    testRunnerVersion = '1.0.2'
+    espressoCoreVersion = '3.0.2'
+    robolectricVersion = '3.8'
+    assertjCoreVersion = '3.8.0'
+    mockitoCoreVersion = '2.19.0'
+
+    // retrofit and gson
+    gsonVersion = '2.8.3'
+    retrofit2Version = '2.3.0'
+    retrofit2ConverterGsonVersion = '2.2.0'
+
+    // picasso
+    picassoVersion = '2.4.0'
+
+    // okhttp client
+    okhttp3Version = '3.11.0'
+    okhttp3LoggingInterceptorVersion = '3.10.0'
+
+    // butter knife library
+    butterknifeVersion = '8.8.1'
+
+    // dagger 2 library
+    daggerVersion = '2.16'
+    daggerAndroidVersion = '2.16'
+    daggerCompilerVersion = '2.16'
+    daggerAndroidProcessorVersion = '2.11'
+
+    // RxJava
+    rxjava2Version = '2.1.9'
+    rxandroidVersion = '2.0.1'
+    retrofit2Rxjava2AdapterVersion = '1.0.0'
+}
