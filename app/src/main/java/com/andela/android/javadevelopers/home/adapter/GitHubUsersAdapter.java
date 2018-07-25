@@ -97,6 +97,7 @@ public class GitHubUsersAdapter extends RecyclerView.Adapter<GitHubUsersAdapter.
     }
 
     public void setData(ArrayList<GitHubUser> gitHubUsers) {
+        this.gitHubUsers.clear();
         this.gitHubUsers.addAll(gitHubUsers);
         notifyDataSetChanged();
     }
