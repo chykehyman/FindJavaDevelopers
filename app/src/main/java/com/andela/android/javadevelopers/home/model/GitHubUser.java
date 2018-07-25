@@ -11,13 +11,23 @@ import com.google.gson.annotations.SerializedName;
 
 public class GitHubUser implements Parcelable {
     @SerializedName("login")
-    private final String username;
+    private String username;
 
     @SerializedName("avatar_url")
-    private final String profileImage;
+    private String profileImage;
 
     @SerializedName("html_url")
-    private final String githubLink;
+    private String githubLink;
+
+    public GitHubUser(String username, String profileImage, String githubLink) {
+        this.username = username;
+        this.profileImage = profileImage;
+        this.githubLink = githubLink;
+    }
+
+    public GitHubUser() {
+        // left blank
+    }
 
 
     public String getUsername() {

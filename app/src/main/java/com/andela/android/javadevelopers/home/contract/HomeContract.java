@@ -1,9 +1,7 @@
 package com.andela.android.javadevelopers.home.contract;
 
-import android.content.Context;
-
-import com.andela.android.javadevelopers.home.model.GitHubUser;
 import com.andela.android.javadevelopers.home.api.GitHubApi;
+import com.andela.android.javadevelopers.home.model.GitHubUser;
 
 import java.util.ArrayList;
 
@@ -53,11 +51,11 @@ public interface HomeContract {
         void hideSwipeRefresh(String fetchStatus);
 
         /**
-         * Sets context.
+         * Sets network available.
          *
-         * @return the application view context
+         * @return the network available
          */
-        Context setViewContext();
+        boolean isNetworkAvailable();
     }
 
     /**

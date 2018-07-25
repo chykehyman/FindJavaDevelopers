@@ -189,11 +189,13 @@ public class MainActivity extends AppCompatActivity implements HomeView, Recycle
         outState.putParcelableArrayList(DEVELOPERS_LIST, gitHubUser);
     }
 
-
     /**
-     * Check network connection.
+     * Sets network available.
+     *
+     * @return the network available
      */
-    public Boolean checkNetworkConnection() {
+    @Override
+    public boolean isNetworkAvailable() {
         return CheckNetworkConnection.getConnectivityStatus(activityContext);
     }
 
@@ -208,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, Recycle
             displayDevelopersList(gitHubUser);
             setSwipeRefreshWidget();
         } else {
-            if (checkNetworkConnection()) {
+            if (isNetworkAvailable()) {
                 developerPresenter.requestDataFromServer(gitHubApi, location, limit);
             } else {
                 displaySnackBar(R.string.no_connection, gitHubUser);
@@ -265,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, Recycle
      */
     @Override
     public void showSnackBar() {
-        isConnected = checkNetworkConnection();
+        isConnected = isNetworkAvailable();
 
         int networkStatus = R.string.no_connection;
         if (isConnected) {
@@ -350,16 +352,6 @@ public class MainActivity extends AppCompatActivity implements HomeView, Recycle
         textView.setTextColor(Color.WHITE);
 
         snackbar.show();
-    }
-
-    /**
-     * Sets context.
-     *
-     * @return the application view context
-     */
-    @Override
-    public Context setViewContext() {
-        return appContext;
     }
 
     /**
